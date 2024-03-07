@@ -33,7 +33,7 @@ defmodule Giza.Mixfile do
   defp deps do
     [{:ex_doc, "~> 0.31", only: :dev, runtime: false},
      {:httpoison, "~> 2.0"},
-     {:mariaex, "~> 0.9"}]
+     {:myxql, "~> 0.6.0"}]
   end
 
   defp description() do
