@@ -31,8 +31,8 @@ defmodule Giza.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:ex_doc, "~> 0.16", only: :dev, runtime: false},
-     {:httpoison, "~> 1.3"},
+    [{:ex_doc, "~> 0.31", only: :dev, runtime: false},
+     {:httpoison, "~> 2.0"},
      {:mariaex, "~> 0.9"}]
   end
 
@@ -51,7 +51,7 @@ defmodule Giza.Mixfile do
      maintainers: ["Tyler Pierce"],
      licenses: ["Apache 2.0"],
      links: %{
-      "GitHub" => "https://github.com/Tyler-pierce/giza_sphinxsearch", 
+      "GitHub" => "https://github.com/Tyler-pierce/giza_sphinxsearch",
       "Sphinx Search" => "http://sphinxsearch.com/",
       "Manticore Search" => "https://manticoresearch.com/"},
      source_url: "https://github.com/Tyler-pierce/giza_sphinxsearch"]

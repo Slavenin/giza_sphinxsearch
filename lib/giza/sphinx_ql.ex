@@ -1,9 +1,9 @@
 defmodule Giza.SphinxQL do
 	@moduledoc """
-	Query building helper functions for SphinxQL requests (http://sphinxsearch.com/docs/devel.html#sphinxql-reference). 
-	This is the recommended way to query Sphinx (for client speed particularly) and will be the most supported style in 
+	Query building helper functions for SphinxQL requests (http://sphinxsearch.com/docs/devel.html#sphinxql-reference).
+	This is the recommended way to query Sphinx (for client speed particularly) and will be the most supported style in
 	Giza going forward.  SphinxQL is very close to standard SQL with a few non-supported terms that wouldn't make
-	sence in the search world and a few extras that only make sense in Sphinx's world. 100% of Sphinx' functionality is 
+	sence in the search world and a few extras that only make sense in Sphinx's world. 100% of Sphinx' functionality is
 	accessable through this method.
 	"""
 
@@ -35,7 +35,7 @@ defmodule Giza.SphinxQL do
 	def raw(%SphinxqlQuery{} = query, raw_query_string) when is_binary(raw_query_string) do
 		query_new = %{query | :raw => raw_query_string}
 		query_new
-	end	
+	end
 
 	@doc """
 	Return a SphinxQL query augmented with a select statement. Either a string (binary) or list of fields is acceptable input.
@@ -62,7 +62,7 @@ defmodule Giza.SphinxQL do
 		iex> Giza.SphinxQL.new() |> Giza.SphinxQL.suggest("sbetei", "posts_index", [limit: 3, max_edits: 4])
 	"""
 	def suggest(%SphinxqlQuery{} = query, index, phrase, opts \\ []) when is_binary(index) do
-		limit = cond do 
+		limit = cond do
 			Keyword.has_key?(opts, :limit) ->
 				Keyword.get(opts, :limit)
 			true ->
@@ -76,7 +76,7 @@ defmodule Giza.SphinxQL do
 				@default_suggest_max_edits
 		end
 
-		query_new = call(query, "QSUGGEST('" <> phrase <> "','" <> index <> "', " <> Integer.to_string(limit) 
+		query_new = call(query, "QSUGGEST('" <> phrase <> "','" <> index <> "', " <> Integer.to_string(limit)
 			<> " as limit, " <> Integer.to_string(max_edits) <> " as max_edits)")
 		query_new
 	end
@@ -115,7 +115,7 @@ defmodule Giza.SphinxQL do
 	"""
 	def match(%SphinxqlQuery{} = query, search_phrase) when is_list(search_phrase) do
 		match(query, Enum.join(Enum.map(search_phrase, fn(x) -> String.trim(x) end), " "))
-	end	
+	end
 
 	def match(%SphinxqlQuery{} = query, search_term) when is_binary(search_term) do
 		%{query | :where => "MATCH('" <> String.trim(search_term) <> "')"}
@@ -144,7 +144,7 @@ defmodule Giza.SphinxQL do
 	def limit(%SphinxqlQuery{} = query, limit) when is_integer(limit) do
 		query_new = %{query | :limit => limit}
 		query_new
-	end 
+	end
 
 	@doc """
 	Returns a SphinxQL query augmented with a limit for amount of returned documents.  Only an integer is acceptable input. This
@@ -231,7 +231,7 @@ defmodule Giza.SphinxQL do
 				raw_query
 		end
 
-		case Mariaex.query(:mysql_sphinx_client, query_string, [], [query_type: :text]) do
+		case MyXQL.query(:mysql_sphinx_client, query_string, [], [query_type: :text]) do
 			{:ok, %{columns: columns, rows: rows, num_rows: num_rows}} ->
 				{:ok, %SphinxqlResponse{matches: rows, fields: columns, total: num_rows}}
 			{:error, %{mariadb: %{message: message}}} ->
@@ -267,7 +267,7 @@ defmodule Giza.SphinxQL do
 				# Call overrides all other query parts
 				query_string
 		end
-		
+
 	end
 
 	defp query_to_string_select(%SphinxqlQuery{select: nil}) do
@@ -304,7 +304,7 @@ defmodule Giza.SphinxQL do
 
 	defp query_to_string_order_by(%SphinxqlQuery{order_by: nil}) do
 		nil
-	end 
+	end
 
 	defp query_to_string_order_by(%SphinxqlQuery{order_by: order_by}) do
 		"ORDER BY " <> order_by

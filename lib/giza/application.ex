@@ -11,13 +11,11 @@ defmodule Giza.Application do
     workers = get_workers(opts, Keyword.get(opts, :workers, []), [])
 
     sql_client =
-      {Mariaex,
+      {MyXQL,
        name: :mysql_sphinx_client,
        hostname: Application.get_env(:giza_sphinxsearch, :host, "localhost"),
        port: Application.get_env(:giza_sphinxsearch, :sql_port, 9306),
-       username: "",
-       skip_database: true,
-       sock_type: :tcp}
+       username: ""}
 
     Supervisor.init([sql_client | workers], strategy: :one_for_one)
   end
